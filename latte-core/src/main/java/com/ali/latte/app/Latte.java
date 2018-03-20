@@ -1,7 +1,8 @@
 package com.ali.latte.app;
 
 import android.content.Context;
-import android.util.Log;
+
+import com.blankj.utilcode.util.Utils;
 
 import java.util.HashMap;
 
@@ -14,14 +15,21 @@ public  final  class Latte {
 
     public static Configurator init(Context context){
         getConfigurations().put(ConfigType.APPLICATION_CONTEXT.name(), context.getApplicationContext());
+        //必要初始化
+        InitUtils();
         return Configurator.getInstance();
     };
 
-    private static HashMap<String, Object> getConfigurations() {
+    public static HashMap<String, Object> getConfigurations() {
         return Configurator.getInstance().getConfigurations();
     }
 
     public static Context getApplication() {
         return (Context) getConfigurations().get(ConfigType.APPLICATION_CONTEXT.name());
+    }
+
+    // 配置工具库
+    private static void InitUtils() {
+        Utils.init((Context) getConfigurations().get(ConfigType.APPLICATION_CONTEXT.name()));
     }
 }

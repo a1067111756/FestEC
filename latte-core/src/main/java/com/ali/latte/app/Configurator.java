@@ -1,7 +1,9 @@
 package com.ali.latte.app;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.blankj.utilcode.util.Utils;
 import com.joanzapata.iconify.IconFontDescriptor;
 import com.joanzapata.iconify.Iconify;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ public class Configurator {
 
     private static final HashMap<String, Object> LATTE_CONFIGS = new HashMap<>();
     private static final ArrayList<IconFontDescriptor> ICONS = new ArrayList<>();
+
 
     private Configurator() {
         initIcons();
