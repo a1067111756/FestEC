@@ -8,6 +8,7 @@ import com.ali.latte.net.callback.IRequset;
 import com.ali.latte.net.callback.ISuccess;
 import com.ali.latte.ui.LoaderStyle;
 
+import java.io.File;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -23,12 +24,16 @@ public class RestClientBuilder {
     private  String mUrl;
     private  static final Map<String, Object> PARAMS = RestCreator.geyParams();
     private  IRequset mRequest = null;
+    private  String  mDownload_dir = null;
+    private  String  mExtension = null;
+    private  String  mName = null;
     private  ISuccess mSuccess = null;
     private  IFailure mFailure = null;
     private  IError mError = null;
     private  RequestBody mBody = null;
     private  Context mContext = null;
     private  LoaderStyle mLoaderStyle = null;
+    private  File mFile = null;
 
     // 只允许同包的RestClinet new新对象
     RestClientBuilder() {
@@ -59,6 +64,21 @@ public class RestClientBuilder {
         return this;
     }
 
+    public final RestClientBuilder dir(String dir) {
+        this.mDownload_dir = dir;
+        return this;
+    }
+
+    public final RestClientBuilder extension(String extension) {
+        this.mExtension = extension;
+        return this;
+    }
+
+    public final RestClientBuilder name(String name) {
+        this.mName = name;
+        return this;
+    }
+
     public final RestClientBuilder success(ISuccess iSuccess) {
         this.mSuccess = iSuccess;
         return this;
@@ -86,7 +106,18 @@ public class RestClientBuilder {
         return this;
     }
 
+    public final RestClientBuilder file(File file) {
+        this.mFile = file;
+        return this;
+    }
+
+    public final RestClientBuilder file(String filePath) {
+        this.mFile = new File(filePath);
+        return this;
+    }
+
     public final RestClient build() {
-        return new RestClient(mUrl, PARAMS, mRequest, mSuccess, mFailure, mError, mBody, mContext, mLoaderStyle);
+        return new RestClient(mUrl, PARAMS, mRequest, mDownload_dir, mExtension, mName, mSuccess,
+                mFailure, mError, mBody, mContext, mLoaderStyle, mFile);
     }
 }

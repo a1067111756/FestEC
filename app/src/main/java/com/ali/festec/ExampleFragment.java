@@ -10,6 +10,7 @@ import com.ali.latte.delegates.LatteDelagate;
 import com.ali.latte.net.RestClient;
 import com.ali.latte.net.callback.IError;
 import com.ali.latte.net.callback.IFailure;
+import com.ali.latte.net.callback.IRequset;
 import com.ali.latte.net.callback.ISuccess;
 
 /**
