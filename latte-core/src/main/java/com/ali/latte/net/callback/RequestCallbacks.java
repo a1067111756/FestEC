@@ -3,10 +3,9 @@ package com.ali.latte.net.callback;
 import android.os.Handler;
 import android.util.Log;
 
-import com.ali.latte.ui.LatteLoader;
-import com.ali.latte.ui.LoaderStyle;
+import com.ali.latte.ui.loader.LatteLoader;
+import com.ali.latte.ui.loader.LoaderStyle;
 
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

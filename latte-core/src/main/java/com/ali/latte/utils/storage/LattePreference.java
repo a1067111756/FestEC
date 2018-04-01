@@ -3,9 +3,10 @@ package com.ali.latte.utils.storage;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.ali.latte.app.Latte;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.flj.latte.app.Latte;
+
 
 /**
  * Created by 傅令杰 on 2017/4/22

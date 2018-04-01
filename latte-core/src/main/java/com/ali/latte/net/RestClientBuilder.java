@@ -6,7 +6,7 @@ import com.ali.latte.net.callback.IError;
 import com.ali.latte.net.callback.IFailure;
 import com.ali.latte.net.callback.IRequset;
 import com.ali.latte.net.callback.ISuccess;
-import com.ali.latte.ui.LoaderStyle;
+import com.ali.latte.ui.loader.LoaderStyle;
 
 import java.io.File;
 import java.util.Map;

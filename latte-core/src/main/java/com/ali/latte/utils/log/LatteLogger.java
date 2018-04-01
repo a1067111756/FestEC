@@ -1,6 +1,5 @@
 package com.ali.latte.utils.log;
 
-import com.orhanobut.logger.Logger;
 
 /**
  * Created by 傅令杰 on 2017/4/22
@@ -8,6 +7,7 @@ import com.orhanobut.logger.Logger;
 
 public final class LatteLogger {
 
+    /*
     private static final int VERBOSE = 1;
     private static final int DEBUG = 2;
     private static final int INFO = 3;
@@ -59,4 +59,5 @@ public final class LatteLogger {
             Logger.t(tag).e(message);
         }
     }
+    */
 }

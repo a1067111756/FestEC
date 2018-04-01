@@ -9,6 +9,8 @@ import com.joanzapata.iconify.Iconify;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import okhttp3.Interceptor;
+
 
 /**
  * Created by 澄鱼 on 2018/3/14.
@@ -17,12 +19,12 @@ import java.util.HashMap;
 
 public class Configurator {
 
-    private static final HashMap<String, Object> LATTE_CONFIGS = new HashMap<>();
+    private static final HashMap<Object, Object> LATTE_CONFIGS = new HashMap<>();
     private static final ArrayList<IconFontDescriptor> ICONS = new ArrayList<>();
+    private static final ArrayList<Interceptor> INTERCEPTORS = new ArrayList<>();
 
 
     private Configurator() {
-        initIcons();
         LATTE_CONFIGS.put(ConfigType.CONFIG_READY.name(), false);
     }
 
@@ -36,6 +38,7 @@ public class Configurator {
     }
 
     public  final void configure() {
+        initIcons();
         LATTE_CONFIGS.put(ConfigType.CONFIG_READY.name(), true);
     }
 
@@ -48,14 +51,8 @@ public class Configurator {
     }
 
     // 获取配置对象
-    final HashMap<String, Object> getConfigurations() {
+    final HashMap<Object, Object> getConfigurations() {
         return Configurator.LATTE_CONFIGS;
-    }
-
-    // 配置api
-    public final Configurator withApiHost(String host) {
-        LATTE_CONFIGS.put(ConfigType.API_HOST.name(), host);
-        return this;
     }
 
     // 字体图标初始化
@@ -68,12 +65,6 @@ public class Configurator {
         }
     }
 
-    // 加入新的字体图标
-    public final Configurator withIcon(IconFontDescriptor descriptor) {
-        ICONS.add(descriptor);
-        return this;
-    }
-
     // 获取配置项
     @SuppressWarnings("unchecked")
     final <T> T getConfiguration(Enum<ConfigType> key) {
@@ -81,4 +72,29 @@ public class Configurator {
         return (T) LATTE_CONFIGS.get(key.name());
     }
 
+    // 配置api
+    public final Configurator withApiHost(String host) {
+        LATTE_CONFIGS.put(ConfigType.API_HOST.name(), host);
+        return this;
+    }
+
+    // 加入新的字体图标
+    public final Configurator withIcon(IconFontDescriptor descriptor) {
+        ICONS.add(descriptor);
+        return this;
+    }
+
+    // 配置拦截器
+    public final Configurator withInterceptors(Interceptor interceptor) {
+        INTERCEPTORS.add(interceptor);
+        LATTE_CONFIGS.put(ConfigType.INTERCEPTORS, INTERCEPTORS);
+        return this;
+    }
+
+    // 配置拦截器
+    public final Configurator withInterceptors(ArrayList<Interceptor> interceptors) {
+        INTERCEPTORS.addAll(interceptors);
+        LATTE_CONFIGS.put(ConfigType.INTERCEPTORS, INTERCEPTORS);
+        return this;
+    }
 }

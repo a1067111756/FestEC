@@ -1,4 +1,4 @@
-package com.ali.latte.ui;
+package com.ali.latte.ui.loader;
 
 import android.content.Context;
 

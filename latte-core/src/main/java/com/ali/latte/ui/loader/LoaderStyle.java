@@ -1,4 +1,4 @@
-package com.ali.latte.ui;
+package com.ali.latte.ui.loader;
 
 /**
  * Created by 澄鱼 on 2018/3/21.

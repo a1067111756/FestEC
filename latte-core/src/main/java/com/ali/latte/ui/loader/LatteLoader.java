@@ -1,4 +1,4 @@
-package com.ali.latte.ui;
+package com.ali.latte.ui.loader;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatDialog;
@@ -6,9 +6,7 @@ import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 import com.ali.latte.R;
-import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.ScreenUtils;
-import com.blankj.utilcode.util.Utils;
 import com.wang.avi.AVLoadingIndicatorView;
 import java.util.ArrayList;
 

@@ -7,6 +7,7 @@ import android.support.v7.widget.ContentFrameLayout;
 import com.ali.latte.R;
 import com.ali.latte.delegates.LatteDelagate;
 import me.yokeyword.fragmentation.SupportActivity;
+import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 /**
  * Created by 澄鱼 on 2018/3/17.
@@ -32,6 +33,7 @@ public abstract  class ProxyActivity extends SupportActivity{
             loadRootFragment(R.id.delegate_container, setRootDelegate());
         }
     }
+
 
     @Override
     protected void onDestroy() {

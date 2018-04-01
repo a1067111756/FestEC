@@ -3,7 +3,8 @@ package com.ali.latte.utils.dimen;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
-import com.flj.latte.app.Latte;
+import com.ali.latte.app.Latte;
+
 
 /**
  * Created by 傅令杰 on 2017/4/2
