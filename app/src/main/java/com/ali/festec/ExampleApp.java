@@ -5,10 +5,15 @@ import android.util.Log;
 
 import com.ali.latte.app.ConfigType;
 import com.ali.latte.app.Latte;
+import com.ali.latte.ec.database.DatabaseManager;
 import com.ali.latte.ec.icon.FontEcModule;
+import com.ali.latte.ec.launcher.ISignListener;
 import com.ali.latte.net.Interceptors.DebugInterceptor;
+import com.facebook.stetho.Stetho;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 
 import me.yokeyword.fragmentation.Fragmentation;
 import me.yokeyword.fragmentation.helper.ExceptionHandler;
@@ -42,5 +47,18 @@ public class ExampleApp extends Application {
                 })
                 .install();
 
+        DatabaseManager.getInstance().init(this);
+        Logger.addLogAdapter(new AndroidLogAdapter());
+        //initStetho();
+        Stetho.initializeWithDefaults(this);
+    }
+
+    private void initStetho() {
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
+                .build()
+        );
     }
 }

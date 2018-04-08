@@ -1,45 +1,22 @@
 package com.ali.latte.ec.launcher;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
-import android.support.transition.Fade;
-import android.support.transition.Transition;
-import android.support.transition.TransitionInflater;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.ToxicBakery.viewpager.transforms.ABaseTransformer;
 import com.ToxicBakery.viewpager.transforms.AccordionTransformer;
-import com.ToxicBakery.viewpager.transforms.BackgroundToForegroundTransformer;
-import com.ToxicBakery.viewpager.transforms.CubeInTransformer;
-import com.ToxicBakery.viewpager.transforms.CubeOutTransformer;
-import com.ToxicBakery.viewpager.transforms.DepthPageTransformer;
-import com.ToxicBakery.viewpager.transforms.FlipHorizontalTransformer;
-import com.ToxicBakery.viewpager.transforms.FlipVerticalTransformer;
-import com.ToxicBakery.viewpager.transforms.ForegroundToBackgroundTransformer;
-import com.ToxicBakery.viewpager.transforms.RotateDownTransformer;
-import com.ToxicBakery.viewpager.transforms.RotateUpTransformer;
-import com.ToxicBakery.viewpager.transforms.StackTransformer;
-import com.ToxicBakery.viewpager.transforms.ZoomInTransformer;
-import com.ali.latte.app.Latte;
 import com.ali.latte.delegates.LatteDelagate;
 import com.ali.latte.ec.R;
-import com.ali.latte.ec.R2;
-import com.ali.latte.ui.launcher.BannerHolderCreator;
-import com.ali.latte.ui.launcher.ScrollLauncherTag;
 import com.ali.latte.utils.storage.LattePreference;
-import com.ali.latte.utils.transition.GuiUtils;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 
 
 import java.util.ArrayList;
 
-import javax.xml.transform.Transformer;
-
-public class GaideDelegate extends LatteDelagate implements OnItemClickListener {
+public class GaideDelegate extends LatteDelagate{
 
     private ConvenientBanner mConvenientBanner = null;
     private static final ArrayList<Integer> IMAGE_LIST = new ArrayList<>();
@@ -61,7 +38,7 @@ public class GaideDelegate extends LatteDelagate implements OnItemClickListener 
         IMAGE_LIST.add(R.drawable.launcher_00);
         IMAGE_LIST.add(R.drawable.launcher_01);
         IMAGE_LIST.add(R.drawable.launcher_02);
-        IMAGE_LIST.add(R.drawable.launcher_03);
+        IMAGE_LIST.add(R.drawable.launcher_last);
 
         ABaseTransformer transforemer= null;
         try {
@@ -74,20 +51,49 @@ public class GaideDelegate extends LatteDelagate implements OnItemClickListener 
         mConvenientBanner.setPages(new BannerHolderCreator(), IMAGE_LIST)
                 .setPageIndicator(new int[]{R.drawable.border_indicator_gaide_normal, R.drawable.border_indicator_gaide_focus})
                 .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
-                .setOnItemClickListener(this)
                 .setPageTransformer(transforemer)
                 .setCanLoop(false);
+
+        mConvenientBanner.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                if (position == IMAGE_LIST.size() - 1) {
+                    // 退栈返回LauncherDelegate, 但是要保证注册页面布局显现
+                    LattePreference.setAppFlag(LauncherTag.IS_FIRST_LAUNCHER_APP.name(), true);
+                    setResult("register");
+                    pop();
+                }
+            }
+        });
     }
 
+    private void setResult(String title){
+        Bundle bundle = new Bundle();
+        bundle.putString("overback", title);
+        setFragmentResult(RESULT_OK, bundle);
+    }
+
+
+    @Override
+    public boolean onBackPressedSupport() {
+
+        // 退栈返回LauncherDelegate, 但是要保证登陆页面布局显现
+        setResult("login");
+        return super.onBackPressedSupport();
+    }
+
+    /*
     @Override
     public void onItemClick(int position) {
         // 如果点击的是最后一个
         if(position == IMAGE_LIST.size() - 1) {
-            LattePreference.setAppFlag(ScrollLauncherTag.IS_FIRST_LAUNCHER_APP.name(), true);
+
+
+
             // 检查用户是否已经登陆
         }
     }
-
+    */
 
     /*
     // 入场动画

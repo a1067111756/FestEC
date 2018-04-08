@@ -1,4 +1,4 @@
-package com.ali.latte.ui.launcher;
+package com.ali.latte.ec.launcher;
 
 import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 
