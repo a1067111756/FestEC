@@ -1,5 +1,7 @@
 package com.ali.latte.ec.launcher;
 
+import android.animation.AnimatorSet;
+
 import com.ali.latte.ec.mvp.BasePresenter;
 import com.ali.latte.ec.mvp.BaseView;
 
@@ -11,15 +13,40 @@ public interface LauncherContract {
 
     interface View extends BaseView<Presenter>{
 
-        void initSplash();
+        AnimatorSet splashBgInit();
 
-        void showSignIn();
+        AnimatorSet showArrow();
 
-        void showSignUp();
+        AnimatorSet moveLogo();
+
+        void showLogin();
+
+        void hideLogin();
+
+        void showRegister();
+
+        void hideRegister();
+
+        void showMongol();
+
+        void hideArrow();
+
+        void goToGaidePage();
     }
 
     interface Presenter extends BasePresenter{
 
+        public boolean IS_SHOW_SIGN_IN = false;
+
+        void initSplash();
+
+        void showSignInPage();
+
+        void showSignUpPage();
+
+        void hideSignUpPage();
+
+        boolean getIsShowSignIn();
 
     }
 }

@@ -5,14 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/container"
+    android:background="@color/secondary_text"
     tools:context="com.ali.festec.ExampleApp">
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/button1"
-        android:layout_width="80dp"
+        android:id="@+id/button"
         android:transitionName="float"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_width="80dp"
         android:layout_height="80dp"/>
 
 </RelativeLayout>

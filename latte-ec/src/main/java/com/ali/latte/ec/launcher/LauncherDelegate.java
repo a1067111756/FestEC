@@ -18,13 +18,13 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-import com.ali.latte.app.AccountManager;
+
 import com.ali.latte.ui.launcher.ILanucherListener;
-import com.ali.latte.ui.launcher.IUserChecker;
 import com.ali.latte.delegates.LatteDelagate;
 import com.ali.latte.ec.R;
 import com.ali.latte.ec.R2;
@@ -33,7 +33,8 @@ import com.ali.latte.net.callback.IError;
 import com.ali.latte.net.callback.IFailure;
 import com.ali.latte.net.callback.ISuccess;
 import com.ali.latte.utils.log.LatteLogger;
-import com.ali.latte.utils.storage.LattePreference;
+import com.dd.morphingbutton.MorphingAnimation;
+import com.dd.morphingbutton.MorphingButton;
 import com.joanzapata.iconify.widget.IconTextView;
 
 import butterknife.BindView;
@@ -97,7 +98,7 @@ public class LauncherDelegate extends LatteDelagate implements LauncherContract.
 
     /* register */
     @BindView(R2.id.layout_register)
-    ScrollView layoutRegister;
+    RelativeLayout layoutRegister;
     @BindView(R2.id.input_account)
     TextInputEditText mAccount;
     @BindView(R2.id.input_password)
@@ -106,25 +107,49 @@ public class LauncherDelegate extends LatteDelagate implements LauncherContract.
     TextInputEditText mRePassword;
     @BindView(R2.id.input_yanzhen)
     TextInputEditText mYanzhen;
+    @BindView(R2.id.but_show_sign_up_page)
+    MorphingButton mSignUpButton;
 
-    private ISignListener mSignListener = null;
-    private ILanucherListener mLanucherListener = null;
+
     private static final int RET_GAIDE_PAGE = 0;
     private static final int RET_MAIN_PAGE = 0;
-    private boolean IS_SHOW_SIGN_IN = false;
-
+    private ISignListener mSignListener = null;
+    private ILanucherListener mLanucherListener = null;
     private LauncherContract.Presenter presenter = null;
 
     /* show sign up page */
     @OnClick(R2.id.but_show_sign_up_page)
     void showSignUpOnClick() {
-        showSignUpPage();
+
+        MorphingButton.Params circle = MorphingButton.Params.create()
+                .duration(500)
+                .cornerRadius(110) // 56 dp
+                .width(110) // 56 dp
+                .height(110) // 56 dp
+                .color(R.color.colorAccent) // normal state color
+                .colorPressed(R.color.colorAccent) // pressed state color
+                .animationListener(new MorphingAnimation.Listener() {
+                    @Override
+                    public void onAnimationEnd() {
+                        setTranYAnimation(mSignUpButton, 800, 0, 0f, -1150)
+                                .addListener(new AnimatorListenerAdapter() {
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+                                        super.onAnimationEnd(animation);
+                                        presenter.showSignUpPage();
+                                    }
+                                });
+                    }
+                });
+
+        mSignUpButton.morph(circle);
     }
 
     /* show sign in page */
     @OnClick(R2.id.link_login)
     void showSignInOnClick() {
-        showSignInPage();
+
+        presenter.showSignInPage();
     }
 
     /* register account */
@@ -168,7 +193,6 @@ public class LauncherDelegate extends LatteDelagate implements LauncherContract.
         if (checkSignInForm()) {
             SignHandler.onSignIn(mSignListener);
         }
-
         // 进入主页
     }
 
@@ -195,8 +219,7 @@ public class LauncherDelegate extends LatteDelagate implements LauncherContract.
     @Override
     public void onEnterAnimationEnd(Bundle savedInstanceState) {
         super.onEnterAnimationEnd(savedInstanceState);
-
-        new LauncherPresenter(this).start();
+        new LauncherPresenter(getProxyActivity(),this).start();
     }
 
     @Override
@@ -213,15 +236,14 @@ public class LauncherDelegate extends LatteDelagate implements LauncherContract.
         unbinder.unbind();
     }
 
-
     @Override
     public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
         super.onFragmentResult(requestCode, resultCode, data);
         if (requestCode == RET_GAIDE_PAGE && resultCode == RESULT_OK ) {
             if (data.getString("overback").equals("register")) {
-                showSignUpPage();
+                presenter.showSignUpPage();
             } else {
-                showSignInPage();
+                presenter.showSignInPage();
             }
         } else if (requestCode == RET_MAIN_PAGE && resultCode == RESULT_OK ) {}
     }
@@ -229,15 +251,16 @@ public class LauncherDelegate extends LatteDelagate implements LauncherContract.
     @Override
     public boolean onBackPressedSupport() {
 
-        if (IS_SHOW_SIGN_IN) {
+        if (presenter.getIsShowSignIn()) {
             return super.onBackPressedSupport();
         } else {
-            showSignInPage();
+            presenter.hideSignUpPage();
+            presenter.showSignInPage();
             return true;
         }
     }
 
-    private boolean checkSignUpForm() {
+    public boolean checkSignUpForm() {
         final String account = mAccount.getText().toString();
         final String yanzhen = mYanzhen.getText().toString();
         final String password = mPassword.getText().toString();
@@ -269,8 +292,7 @@ public class LauncherDelegate extends LatteDelagate implements LauncherContract.
         return isPass;
     }
 
-
-    private boolean checkSignInForm() {
+    public boolean checkSignInForm() {
 
         final String account = textinputAccount.getEditText().getText().toString();
         final String password = textinputPassword.getEditText().getText().toString();
@@ -295,92 +317,145 @@ public class LauncherDelegate extends LatteDelagate implements LauncherContract.
         return isPass;
     }
 
-    // 1. enter splash page
-    private void showSplash() {
+    @Override
+    public void setPresenter(LauncherContract.Presenter presenter) {
+
+        this.presenter = presenter;
+    }
+
+    @Override
+    public AnimatorSet splashBgInit() {
+
         /* splash enter animation */
-        //1. init splash background
-        setAnimation(imgWall1, 800, 0, 120f, 0);
-        setAnimation(imgWall2, 800, 300, 120f, 0);
-        setAnimation(imgWall3, 600, 350, 120f, 0);
-        setAnimation(imgWall4, 800, 700, 120f, 0);
-        setAnimation(imgWall5, 500, 800, 120f, 0);
-        setAnimation(imgWall6, 500, 800, 120f, 0);
-        setAnimation(imgLogo, 900, 1800, 120f, 0);
-        setAnimation(imgLogoTitle, 700, 2200, 120f, 0);
-        AnimatorSet set = setAnimation(imgArrow, 1000, 2200, 100f, 0);
-        set.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
+        setTranYAnimation(imgWall1, 800, 0, 120f, 0);
+        setTranYAnimation(imgWall2, 800, 300, 120f, 0);
+        setTranYAnimation(imgWall3, 600, 350, 120f, 0);
+        setTranYAnimation(imgWall4, 800, 700, 120f, 0);
+        setTranYAnimation(imgWall5, 500, 800, 120f, 0);
+        setTranYAnimation(imgWall6, 500, 800, 120f, 0);
+        setTranYAnimation(imgLogo, 900, 1800, 120f, 0);
+        setTranYAnimation(imgLogoTitle, 800, 2000, 120f, 0);
+        AnimatorSet set = setTranYAnimation(imgArrow, 1000, 2200, 100f, 0);
 
-                //2. init logo animator
-                // arrow animation
-                imgCircleInside.animate().alphaBy(0.8f).alpha(1).setDuration(200);
-                imgCircleOutside.animate()
-                        .alphaBy(0.8f).alpha(1)
-                        .scaleXBy(0.9f).scaleX(0.1f)
-                        .scaleYBy(0.9f).scaleY(0.1f)
-                        .setDuration(200);
-                AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(getProxyActivity(), R.animator.set_splash_gaide_arrow);
-                set.setTarget(imgCircleOutside);
-                set.setStartDelay(300);
-                set.start();
-                set.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-
-                        // disapear imgCircleInside & imgCircleOutside & imgArrow
-                        imgCircleInside.animate().alphaBy(1f).alpha(0).setDuration(100).start();
-                        imgCircleOutside.animate().alphaBy(1f).alpha(0).setDuration(100).start();
-                        imgArrow.animate().alphaBy(1f).alpha(0).setDuration(100).setStartDelay(200).start();
-
-                        checkIsShowGaide();
-                    }
-                });
-            }
-        });
+        return set;
     }
 
 
-    private void showSignInPage() {
+    @Override
+    public AnimatorSet moveLogo() {
 
-        /* login enter animation */
+        // translationY img_logo & img_title to parent's top, alpha layoutMongol
         layoutLogin.animate().alphaBy(0).alpha(1).setDuration(300).setStartDelay(300).start();
         layoutLogin.setVisibility(View.VISIBLE);
-        // translationY img_logo & img_title to parent's top, alpha layoutMongol
         imgLogoTitle.animate().translationYBy(0).translationY(-1050f).setDuration(650).setStartDelay(300).start();
-        layoutMongol.animate().alpha(0.9f).setDuration(700).setStartDelay(300).start();
         imgLogo.animate().translationYBy(0).translationY(-1050f).setDuration(650).setStartDelay(300).start();
-        AnimatorSet set = setAnimation(layoutBgLogin, 400, 700, 700f, 0);
-        set.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
+        AnimatorSet set = setTranYAnimation(layoutBgLogin, 400, 700, 700f, 0);
 
-                // Login animation
-                setAnimation1(imgHeaderLogin, 400, 0, 300, 0);
-                setAnimation1(textinputAccount, 400, 100, 300, 0);
-                setAnimation1(textinputPassword, 400, 200, 300, 0);
-                setAnimation1(butLogin, 400, 300, 300, 0);
-                setAnimation1(butRegister, 400, 400, 300, 0);
-            }
-        });
-
-        IS_SHOW_SIGN_IN = true;
+        return set;
     }
 
-    private void showSignUpPage() {
+    @Override
+    public void showLogin() {
+        // Login animation
+        setTranXAnimation(imgHeaderLogin, 400, 0, 300, 0);
+        setTranXAnimation(textinputAccount, 400, 100, 300, 0);
+        setTranXAnimation(textinputPassword, 400, 200, 300, 0);
+        setTranXAnimation(butLogin, 400, 300, 300, 0);
+        setTranXAnimation(mSignUpButton, 400, 400, 300, 0);
+
+    }
+
+    @Override
+    public void hideLogin() {
+
+    }
+
+    @Override
+    public void showRegister() {
+
+
         /* register enter animation */
         layoutLogin.animate().alphaBy(1).alpha(0).setDuration(500).start();
         layoutLogin.setVisibility(View.GONE);
-        layoutRegister.animate().alphaBy(0).alpha(1).setDuration(500).setStartDelay(500).start();
         layoutRegister.setVisibility(View.VISIBLE);
 
-        IS_SHOW_SIGN_IN = false;
+        int centerX = mSignUpButton.getLeft();
+        int centerY = mSignUpButton.getBottom();
+
+        float finalRadius = (float) Math.hypot((double) centerX, (double) centerY);
+        Animator mCircularReveal = ViewAnimationUtils.createCircularReveal(layoutRegister, centerX, centerY, 0, finalRadius);
+        mCircularReveal.setDuration(1000);
+        mCircularReveal.start();
+
+        //layoutRegister.animate().alphaBy(0).alpha(1).setDuration(500).setStartDelay(500).start();
+
     }
 
-    private AnimatorSet setAnimation(View view, int duration, int delay, float start, float end) {
+    @Override
+    public void hideRegister() {
+
+        /* register enter animation */
+        layoutRegister.animate().alphaBy(1).alpha(0).setDuration(500).setStartDelay(500).start();
+        layoutRegister.setVisibility(View.GONE);
+        layoutLogin.animate().alphaBy(0).alpha(1).setDuration(500).start();
+        layoutLogin.setVisibility(View.VISIBLE);
+
+
+    }
+
+    @Override
+    public void showMongol() {
+        layoutMongol.animate().alpha(0.9f).setDuration(700).start();
+    }
+
+    @Override
+    public AnimatorSet showArrow() {
+
+        /* logo enter animation */
+        // arrow animation
+        imgCircleInside.animate().alphaBy(0.8f).alpha(1).setDuration(200);
+        imgCircleOutside.animate()
+                .alphaBy(0.8f).alpha(1)
+                .scaleXBy(0.9f).scaleX(0.1f)
+                .scaleYBy(0.9f).scaleY(0.1f)
+                .setDuration(200);
+        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(getProxyActivity(), R.animator.set_splash_gaide_arrow);
+        set.setTarget(imgCircleOutside);
+        set.setStartDelay(300);
+        set.start();
+
+        return set;
+    }
+
+    @Override
+    public void hideArrow() {
+        // disapear imgCircleInside & imgCircleOutside & imgArrow
+        imgCircleInside.animate().alphaBy(1f).alpha(0).setDuration(100).start();
+        imgCircleOutside.animate().alphaBy(1f).alpha(0).setDuration(100).start();
+        imgArrow.animate().alphaBy(1f).alpha(0).setDuration(100).setStartDelay(200).start();
+    }
+
+
+    @Override
+    public void goToGaidePage() {
+        // 这里是使用SharedElement的用例
+        // LOLLIPOP(5.0)系统的 SharedElement支持有 系统BUG， 这里判断大于 > LOLLIPOP
+        GaideDelegate guideFragment = new GaideDelegate();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            setExitTransition(new Fade());
+            guideFragment.setEnterTransition(new Fade());
+
+            // 25.1.0以下的support包,Material过渡动画只有在进栈时有,返回时没有;
+            // 25.1.0+的support包，SharedElement正常
+            extraTransaction()
+                    .startForResult(guideFragment, RET_GAIDE_PAGE);
+        } else {
+            startForResult(guideFragment, RET_GAIDE_PAGE);
+        }
+    }
+
+
+    private AnimatorSet setTranYAnimation(View view, int duration, int delay, float start, float end) {
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationY", start, end);
         ObjectAnimator animator1 = ObjectAnimator.ofFloat(view, "alpha", 0.0f, 1);
 
@@ -393,7 +468,7 @@ public class LauncherDelegate extends LatteDelagate implements LauncherContract.
         return set;
     }
 
-    private AnimatorSet setAnimation1(View view, int duration, int delay, float start, float end) {
+    private AnimatorSet setTranXAnimation(View view, int duration, int delay, float start, float end) {
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationX", start, end);
         ObjectAnimator animator1 = ObjectAnimator.ofFloat(view, "alpha", 0.0f, 1);
 
@@ -406,63 +481,4 @@ public class LauncherDelegate extends LatteDelagate implements LauncherContract.
         return set;
     }
 
-
-    // 2. whether first enter app, if not enter gaidePage, else enter sign In / Up page
-    private void checkIsShowGaide() {
-
-        // go to gaide page
-        if (!LattePreference.getAppFlag(LauncherTag.IS_FIRST_LAUNCHER_APP.name())) {
-            GaideDelegate guideFragment = new GaideDelegate();
-            // 这里是使用SharedElement的用例
-            // LOLLIPOP(5.0)系统的 SharedElement支持有 系统BUG， 这里判断大于 > LOLLIPOP
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                setExitTransition(new Fade());
-                guideFragment.setEnterTransition(new Fade());
-                guideFragment.setSharedElementReturnTransition(new DetailsTransition());
-                guideFragment.setSharedElementEnterTransition(new DetailsTransition());
-
-                // 25.1.0以下的support包,Material过渡动画只有在进栈时有,返回时没有;
-                // 25.1.0+的support包，SharedElement正常
-                extraTransaction()
-                        .addSharedElement(imgCircleOutside, "gaide")
-                        .startForResult(guideFragment, RET_GAIDE_PAGE);
-            } else {
-                startForResult(guideFragment, RET_GAIDE_PAGE);
-            }
-        } else {
-
-            AccountManager.checkAccount(new IUserChecker() {
-                // go to signIn page
-                @Override
-                public void onSignIn() {
-
-                    // 跳转到主页
-                    /*
-                    if (mLanucherListener != null) {
-                        mLanucherListener.onLauncherFinish(OnLauncherFinishTag.SIGNED);
-                    }
-                    */
-                }
-
-                // go to signUp page
-                @Override
-                public void onNotSignIn() {
-
-                    // 跳转到登陆页
-                    showSignInPage();
-                    /*
-                    if (mLanucherListener != null) {
-                        mLanucherListener.onLauncherFinish(OnLauncherFinishTag.NOT_SIGNED);
-                    }
-                    */
-                }
-            });
-        }
-    }
-
-
-    @Override
-    public void setPresenter(LauncherContract.Presenter presenter) {
-        this.presenter = presenter;
-    }
 }

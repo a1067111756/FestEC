@@ -67,4 +67,7 @@ dependencies {
     //fackbook stetho
     compile 'com.facebook.stetho:stetho:1.5.0'
     compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    //微信登陆依赖(包含统计)
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+
 }

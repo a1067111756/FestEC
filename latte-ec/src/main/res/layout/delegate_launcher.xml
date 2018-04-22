@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:cutom="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -144,6 +145,7 @@
         android:layout_alignParentBottom="true"
         android:gravity="center"
         android:elevation="6dp"
+        android:transitionName="gaide"
         android:layout_marginBottom="40dp">
 
         <android.support.v7.widget.AppCompatImageView
@@ -163,6 +165,7 @@
             android:layout_centerInParent="true"
             android:elevation="5dp"
             android:alpha="0"
+            android:transitionName="gaide"
             android:background="@drawable/border_circle_gaide_inside" />
 
         <com.joanzapata.iconify.widget.IconTextView
@@ -173,6 +176,7 @@
             android:layout_height="wrap_content"
             android:alpha="0"
             android:elevation="7dp"
+            android:transitionName="gaide"
             android:layout_centerInParent="true"
             tools:ignore="HardcodedText"/>
 
@@ -253,6 +257,7 @@
                 android:layout_marginBottom="8dp"
                 android:textColorHint="@color/secondary_text"
                 android:hint="邮箱/电话"
+                android:alpha="0"
                 app:counterOverflowTextAppearance="@style/TextOverCount"
                 app:counterMaxLength="20"
                 app:counterEnabled="true">
@@ -277,6 +282,7 @@
                 android:layout_marginBottom="8dp"
                 android:textColorHint="@color/secondary_text"
                 android:hint="密码"
+                android:alpha="0"
                 app:counterOverflowTextAppearance="@style/TextOverCount"
                 app:counterMaxLength="16"
                 app:counterEnabled="true">
@@ -306,7 +312,7 @@
         </RelativeLayout>
 
 
-        <android.support.v7.widget.AppCompatButton
+        <com.dd.morphingbutton.MorphingButton
             android:id="@+id/but_show_sign_up_page"
             android:layout_width="110dp"
             android:layout_height="40dp"
@@ -316,23 +322,19 @@
             android:alpha="0"
             android:layout_marginBottom="70dp"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/border_register_button"
+            cutom:corner_radius="50dp"
+            cutom:backgroud_color="@color/colorWhite"
+            cutom:stroke_color="@color/colorWhite"
             android:textColor="@android:color/black"
             android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
 
-
     <!-- 注册布局 -->
-    <ScrollView
+    <RelativeLayout
         android:id="@+id/layout_register"
-        android:background="@drawable/border_register_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="90dp"
-        android:layout_marginBottom="70dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
         android:visibility="gone"
         android:elevation="12dp">
 
@@ -340,7 +342,8 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="100dp"
+            android:background="@color/colorWhite"
+            android:paddingTop="140dp"
             android:paddingLeft="24dp"
             android:paddingRight="24dp">
 
@@ -445,6 +448,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </RelativeLayout>
 
 </RelativeLayout>
