@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.ali.latte.activities.ProxyActivity;
+import com.ali.latte.app.Latte;
 import com.ali.latte.delegates.LatteDelagate;
 import com.ali.latte.ec.launcher.ISignListener;
 import com.ali.latte.ec.launcher.LauncherDelegate;
@@ -24,6 +25,9 @@ public class MainActivity  extends ProxyActivity implements ISignListener, ILanu
         if (actionBar != null) {
             actionBar.hide();
         }
+
+        // 设置activity， 用于初始化配置微信SDK
+        Latte.getConfigurator().withActivity(this);
     }
 
     @Override

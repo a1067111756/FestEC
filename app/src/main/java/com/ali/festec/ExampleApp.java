@@ -1,16 +1,12 @@
 package com.ali.festec;
 
 import android.app.Application;
-import android.util.Log;
 
-import com.ali.latte.app.ConfigType;
 import com.ali.latte.app.Latte;
 import com.ali.latte.ec.database.DatabaseManager;
 import com.ali.latte.ec.icon.FontEcModule;
-import com.ali.latte.ec.launcher.ISignListener;
 import com.ali.latte.net.Interceptors.DebugInterceptor;
 import com.facebook.stetho.Stetho;
-import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
@@ -28,6 +24,8 @@ public class ExampleApp extends Application {
                 .withIcon(new FontEcModule())
                 .withInterceptors(new DebugInterceptor("index", R.raw.test))
                 .withApiHost("http://127.0.0.1")
+                .withWeChatAppId("")
+                .withWeChatAppSceret("")
                 .configure();
 
         Fragmentation.builder()

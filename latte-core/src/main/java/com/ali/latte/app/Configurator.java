@@ -1,9 +1,7 @@
 package com.ali.latte.app;
 
-import android.content.Context;
-import android.util.Log;
+import android.app.Activity;
 
-import com.blankj.utilcode.util.Utils;
 import com.joanzapata.iconify.IconFontDescriptor;
 import com.joanzapata.iconify.Iconify;
 import java.util.ArrayList;
@@ -25,7 +23,7 @@ public class Configurator {
 
 
     private Configurator() {
-        LATTE_CONFIGS.put(ConfigType.CONFIG_READY.name(), false);
+        LATTE_CONFIGS.put(ConfigKeys.CONFIG_READY.name(), false);
     }
 
     private static class Holder {
@@ -39,12 +37,12 @@ public class Configurator {
 
     public  final void configure() {
         initIcons();
-        LATTE_CONFIGS.put(ConfigType.CONFIG_READY.name(), true);
+        LATTE_CONFIGS.put(ConfigKeys.CONFIG_READY.name(), true);
     }
 
     // 配置项检查
     private void checkConfiguration() {
-        final boolean isReady = (boolean)LATTE_CONFIGS.get(ConfigType.CONFIG_READY.name());
+        final boolean isReady = (boolean)LATTE_CONFIGS.get(ConfigKeys.CONFIG_READY.name());
         if (!isReady) {
             throw  new RuntimeException("Configuration is not ready, call configure");
         }
@@ -67,14 +65,14 @@ public class Configurator {
 
     // 获取配置项
     @SuppressWarnings("unchecked")
-    final <T> T getConfiguration(Enum<ConfigType> key) {
+    final <T> T getConfiguration(Enum<ConfigKeys> key) {
         checkConfiguration();
         return (T) LATTE_CONFIGS.get(key.name());
     }
 
     // 配置api
     public final Configurator withApiHost(String host) {
-        LATTE_CONFIGS.put(ConfigType.API_HOST.name(), host);
+        LATTE_CONFIGS.put(ConfigKeys.API_HOST.name(), host);
         return this;
     }
 
@@ -87,14 +85,32 @@ public class Configurator {
     // 配置拦截器
     public final Configurator withInterceptors(Interceptor interceptor) {
         INTERCEPTORS.add(interceptor);
-        LATTE_CONFIGS.put(ConfigType.INTERCEPTORS, INTERCEPTORS);
+        LATTE_CONFIGS.put(ConfigKeys.INTERCEPTORS, INTERCEPTORS);
         return this;
     }
 
     // 配置拦截器
     public final Configurator withInterceptors(ArrayList<Interceptor> interceptors) {
         INTERCEPTORS.addAll(interceptors);
-        LATTE_CONFIGS.put(ConfigType.INTERCEPTORS, INTERCEPTORS);
+        LATTE_CONFIGS.put(ConfigKeys.INTERCEPTORS, INTERCEPTORS);
+        return this;
+    }
+
+    // 配置微信APP ID
+    public final Configurator withWeChatAppId(String appId) {
+        LATTE_CONFIGS.put(ConfigKeys.WX_CHAT_APP_ID, appId);
+        return this;
+    }
+
+    // 配置微信APP Secret
+    public final Configurator withWeChatAppSceret(String appSceret) {
+        LATTE_CONFIGS.put(ConfigKeys.WX_CHAT_APP_SECRET, appSceret);
+        return this;
+    }
+
+    // Application全局上下文
+    public final Configurator withActivity(Activity activity) {
+        LATTE_CONFIGS.put(ConfigKeys.ACTIVITY, activity);
         return this;
     }
 }

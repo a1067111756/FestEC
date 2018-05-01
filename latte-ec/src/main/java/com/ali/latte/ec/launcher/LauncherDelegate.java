@@ -33,6 +33,8 @@ import com.ali.latte.net.callback.IError;
 import com.ali.latte.net.callback.IFailure;
 import com.ali.latte.net.callback.ISuccess;
 import com.ali.latte.utils.log.LatteLogger;
+import com.blankj.utilcode.util.DeviceUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.dd.morphingbutton.MorphingAnimation;
 import com.dd.morphingbutton.MorphingButton;
 import com.joanzapata.iconify.widget.IconTextView;
@@ -131,12 +133,23 @@ public class LauncherDelegate extends LatteDelagate implements LauncherContract.
                 .animationListener(new MorphingAnimation.Listener() {
                     @Override
                     public void onAnimationEnd() {
-                        setTranYAnimation(mSignUpButton, 800, 0, 0f, -1150)
-                                .addListener(new AnimatorListenerAdapter() {
+
+                        int screenWidth = ScreenUtils.getScreenWidth();
+                        int screenHight = ScreenUtils.getScreenHeight();
+                        int []location=new int[2];
+                        mSignUpButton.getLocationOnScreen(location);
+                        int currentX =location[0];//获取当前位置的横坐标
+                        int currentY =location[1];//获取当前位置的纵坐标
+
+
+                        mSignUpButton.animate()
+                                .translationXBy(0).translationX(screenWidth - currentX)
+                                .translationYBy(0).translationY(currentY - screenHight)
+                                .setDuration(500)
+                                .setListener(new AnimatorListenerAdapter() {
                                     @Override
                                     public void onAnimationEnd(Animator animation) {
                                         super.onAnimationEnd(animation);
-                                        presenter.showSignUpPage();
                                     }
                                 });
                     }
