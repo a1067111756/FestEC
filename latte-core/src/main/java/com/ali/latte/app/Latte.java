@@ -1,10 +1,11 @@
 package com.ali.latte.app;
 
 import android.content.Context;
+import android.os.Handler;
 
 import com.blankj.utilcode.util.Utils;
-
 import java.util.HashMap;
+
 
 
 /**
@@ -35,5 +36,9 @@ public  final  class Latte {
     // 配置工具库
     private static void InitUtils() {
         Utils.init((Context) getConfigurations().get(ConfigKeys.APPLICATION_CONTEXT.name()));
+    }
+
+    public static Handler getHandler() {
+        return (Handler)getConfigurations().get(ConfigKeys.HANDLER.name());
     }
 }

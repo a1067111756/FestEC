@@ -13,5 +13,6 @@ public enum ConfigKeys {
     INTERCEPTORS,
     WX_CHAT_APP_ID,
     WX_CHAT_APP_SECRET,
-    ACTIVITY
+    ACTIVITY,
+    HANDLER
 }

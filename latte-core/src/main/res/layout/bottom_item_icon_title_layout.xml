@@ -16,7 +16,7 @@
         android:textSize="25sp"
         android:gravity="center"/>
 
-    <android.support.v7.widget.AppCompatAutoCompleteTextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/tv_bottom_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

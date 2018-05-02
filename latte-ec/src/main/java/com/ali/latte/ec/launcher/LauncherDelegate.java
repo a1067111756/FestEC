@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
 
+import com.ali.latte.ec.main.EcBottomDelegate;
 import com.ali.latte.ui.launcher.ILanucherListener;
 import com.ali.latte.delegates.LatteDelagate;
 import com.ali.latte.ec.R;
@@ -206,7 +207,9 @@ public class LauncherDelegate extends LatteDelagate implements LauncherContract.
         if (checkSignInForm()) {
             SignHandler.onSignIn(mSignListener);
         }
+
         // 进入主页
+        startForResult(new EcBottomDelegate(), RET_MAIN_PAGE);
     }
 
 
