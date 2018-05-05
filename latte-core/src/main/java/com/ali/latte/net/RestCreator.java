@@ -3,6 +3,7 @@ package com.ali.latte.net;
 import com.ali.latte.app.ConfigKeys;
 import com.ali.latte.app.Latte;
 import com.ali.latte.rx.RxRestService;
+import com.ali.latte.utils.log.LatteLogger;
 
 import java.util.ArrayList;
 import java.util.WeakHashMap;
@@ -46,11 +47,19 @@ public class RestCreator {
     private static final class OkHttpHolder {
         private static final int TIME_OUT = 60;
         private static final OkHttpClient.Builder BUILDER = new OkHttpClient.Builder();
-        private static final ArrayList<Interceptor> INTERCEPTORS = (ArrayList<Interceptor>) Latte.getConfigurations().get(ConfigKeys.INTERCEPTORS);
+        private static ArrayList<Interceptor> INTERCEPTORS = null;
+
+        public OkHttpHolder() {
+            if (Latte.getConfigurations().get(ConfigKeys.INTERCEPTORS) != null) {
+                INTERCEPTORS = (ArrayList<Interceptor>) Latte.getConfigurations().get(ConfigKeys.INTERCEPTORS);
+            }
+
+        }
 
         // 将配置文件设置的拦截器添加到OkHttpClient中
         private static OkHttpClient.Builder addInterceptor() {
-            if (INTERCEPTORS != null || !INTERCEPTORS.isEmpty()) {
+
+            if (INTERCEPTORS != null && !INTERCEPTORS.isEmpty()) {
                 for (Interceptor interceptor : INTERCEPTORS) {
                     BUILDER.addInterceptor(interceptor);
                 }

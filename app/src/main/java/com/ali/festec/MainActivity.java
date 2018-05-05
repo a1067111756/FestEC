@@ -16,6 +16,8 @@ import com.ali.latte.ec.launcher.LauncherDelegate;
 import com.ali.latte.ui.launcher.ILanucherListener;
 import com.ali.latte.ui.launcher.OnLauncherFinishTag;
 
+import qiu.niorgai.StatusBarCompat;
+
 public class MainActivity  extends ProxyActivity implements ISignListener, ILanucherListener{
 
     @Override
@@ -28,6 +30,8 @@ public class MainActivity  extends ProxyActivity implements ISignListener, ILanu
 
         // 设置activity， 用于初始化配置微信SDK
         Latte.getConfigurator().withActivity(this);
+        // 设置沉浸式状态栏
+        StatusBarCompat.translucentStatusBar(this, true);
     }
 
     @Override

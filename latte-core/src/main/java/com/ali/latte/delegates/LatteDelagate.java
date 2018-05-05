@@ -5,4 +5,10 @@ package com.ali.latte.delegates;
  */
 
 public abstract class LatteDelagate extends PermissionCheckerDelegate{
+
+    @SuppressWarnings("unchecked")
+    public <T extends LatteDelagate> T getParentDelegate() {
+        return (T)getParentFragment();
+    }
+
 }
