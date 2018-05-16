@@ -14,5 +14,6 @@ public enum ConfigKeys {
     WX_CHAT_APP_ID,
     WX_CHAT_APP_SECRET,
     ACTIVITY,
-    HANDLER
+    HANDLER,
+    JAVASCRIPT_INTERFACE
 }

@@ -3,10 +3,14 @@ package com.ali.latte.app;
 import android.app.Activity;
 import android.os.Handler;
 
+import com.ali.latte.delegates.web.event.Event;
+import com.ali.latte.delegates.web.event.EventManager;
 import com.joanzapata.iconify.IconFontDescriptor;
 import com.joanzapata.iconify.Iconify;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+
+import org.greenrobot.greendao.annotation.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,4 +130,16 @@ public class Configurator {
         LATTE_CONFIGS.put(ConfigKeys.ACTIVITY, activity);
         return this;
     }
+
+    public Configurator withJavascriptInterface(@NotNull String name) {
+        LATTE_CONFIGS.put(ConfigKeys.JAVASCRIPT_INTERFACE.name(), name);
+        return this;
+    }
+
+    public Configurator withWebEvent(@NotNull String name, @NotNull Event event) {
+        final EventManager manager = EventManager.getInstance();
+        manager.addEvent(name, event);
+        return this;
+    }
+
 }

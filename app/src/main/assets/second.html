@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>本地测试2</title>
+</head>
+<body>
+
+<h1>这是本地页面2</h1>
+<button id="test">测试事件</button>
+<script type="text/javascript">
+    document.getElementById('test').onclick = function () {
+        var command = {
+            'action': 'test'
+        }
+        naticeCall()
+        Latte.event(JSON.stringify(command));
+    };
+
+    //必须是全局暴露的方法
+    function naticeCall() {
+        alert("原生调用")
+    }
+</script>
+</body>
+</html>

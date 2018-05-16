@@ -2,10 +2,10 @@ package com.ali.festec;
 
 import android.app.Application;
 
+import com.ali.festec.event.TestEvent;
 import com.ali.latte.app.Latte;
 import com.ali.latte.ec.database.DatabaseManager;
 import com.ali.latte.ec.icon.FontEcModule;
-import com.ali.latte.net.Interceptors.DebugInterceptor;
 import com.facebook.stetho.Stetho;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -25,6 +25,8 @@ public class ExampleApp extends Application {
                 .withApiHost("http://192.168.62.2/RestServer/api/")
                 .withWeChatAppId("")
                 .withWeChatAppSceret("")
+                .withJavascriptInterface("Latte")
+                .withWebEvent("test", new TestEvent())
                 .configure();
 
         Fragmentation.builder()

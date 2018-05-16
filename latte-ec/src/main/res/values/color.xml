@@ -14,4 +14,6 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
     <color name="colorAccent">#607D8B</color>
+    <color name="we_chat_black">#323232</color>
+    <color name="item_background">#F1F1F1</color>
 </resources>
