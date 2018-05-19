@@ -2,15 +2,15 @@ package com.ali.latte.delegates.web;
 
 import android.graphics.Bitmap;
 import android.os.Handler;
-import android.webkit.WebResourceRequest;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
 import com.ali.latte.app.ConfigKeys;
 import com.ali.latte.app.Latte;
 import com.ali.latte.delegates.web.route.Router;
 import com.ali.latte.ui.loader.LatteLoader;
 import com.ali.latte.utils.log.LatteLogger;
+import com.ali.latte.utils.storage.LattePreference;
 
 /**
  * Created by 澄鱼 on 2018/5/13.
@@ -48,6 +48,7 @@ public class WebViewClientImpl extends WebViewClient{
     @Override
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
+        syncCookie();
         if (mIWebPageLoadListner != null) {
             mIWebPageLoadListner.onLoadEnd();
         }
@@ -58,5 +59,20 @@ public class WebViewClientImpl extends WebViewClient{
             }
         }, 1000);
 
+    }
+
+    // 获取浏览器cookie
+    private void syncCookie() {
+        final CookieManager manager = CookieManager.getInstance();
+        // 注意这里的cookie和API请求的Cookie是不一样的， 这个在网页时不可见的
+        final String webHost = (String) Latte.getConfigurations().get(ConfigKeys.WEB_HOST.name());
+        if (webHost != null) {
+            if (manager.hasCookies()) {
+                final String cookieStr = manager.getCookie(webHost);
+                if (cookieStr != null && cookieStr != "") {
+                    LattePreference.addCustomAppProfile("cookie", cookieStr);
+                }
+            }
+        }
     }
 }

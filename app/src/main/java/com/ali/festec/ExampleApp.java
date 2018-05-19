@@ -6,6 +6,7 @@ import com.ali.festec.event.TestEvent;
 import com.ali.latte.app.Latte;
 import com.ali.latte.ec.database.DatabaseManager;
 import com.ali.latte.ec.icon.FontEcModule;
+import com.ali.latte.net.Interceptors.AddCookieInterceptor;
 import com.facebook.stetho.Stetho;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.orhanobut.logger.AndroidLogAdapter;
@@ -23,10 +24,12 @@ public class ExampleApp extends Application {
                 .withIcon(new FontAwesomeModule())
                 .withIcon(new FontEcModule())
                 .withApiHost("http://192.168.62.2/RestServer/api/")
+                .withWebHost("https://www.baidu.com/")
                 .withWeChatAppId("")
                 .withWeChatAppSceret("")
                 .withJavascriptInterface("Latte")
                 .withWebEvent("test", new TestEvent())
+                .withInterceptor(new AddCookieInterceptor())
                 .configure();
 
         Fragmentation.builder()

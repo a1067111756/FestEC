@@ -1,7 +1,9 @@
 package com.ali.latte.delegates.web;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -15,6 +17,17 @@ public class WebViewInitializer {
     public WebView createWebView(WebView mWebView) {
 
         mWebView.setWebContentsDebuggingEnabled(true);
+
+        //cook
+        final CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        // 跨域cook  sdk21以上跨域cook默认是关闭的
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cookieManager.setAcceptThirdPartyCookies(mWebView, true);
+        }
+        cookieManager.setAcceptFileSchemeCookies(true);
+
+
         //不能横向滚动
         mWebView.setHorizontalScrollBarEnabled(false);
         //不能纵向滚动
