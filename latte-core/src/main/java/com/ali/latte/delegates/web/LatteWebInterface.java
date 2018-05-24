@@ -4,7 +4,7 @@ import android.webkit.JavascriptInterface;
 
 import com.ali.latte.delegates.web.event.Event;
 import com.ali.latte.delegates.web.event.EventManager;
-import com.ali.latte.delegates.web.event.TestEvent;
+
 import com.alibaba.fastjson.JSON;
 
 /**
